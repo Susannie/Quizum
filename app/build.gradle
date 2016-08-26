@@ -1,0 +1,28 @@
+apply plugin: 'application'
+
+mainClassName = 'quizum.app.Quizum'
+
+jar {
+	baseName = 'Quizum'
+	
+	manifest {
+        attributes 'Main-Class': mainClassName
+    }
+    
+    exclude ('templates') 
+      
+	from { 
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
+
+dependencies {
+    compile project(':common')
+}
+	
+task install(type: Copy) {
+	dependsOn installResources
+	
+	from jar
+	into '../dist/QuizumBeta'
+}

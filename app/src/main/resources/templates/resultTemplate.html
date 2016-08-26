@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Wyniki testu</title>
+<style>
+body {
+	background: /* On "top" */ repeating-linear-gradient( 45deg, transparent
+		, transparent 10px, #ddd 10px, #ddd 20px), /* on "bottom" */
+  	linear-gradient( to bottom, #eee, #aaa);
+	background-size: 100% 100%;
+}
+
+#result {
+	background: #f5f5f5;
+	margin: 0 auto;
+	padding: 20px;
+	align-self: center;
+	width: 75%;
+}
+</style>
+</head>
+<body>
+<div id="result">
+<center><h2>Wyniki testu użytkownika: {{username}}</h2></center></br>
+
+<b><h3>Ilość pytań: {{total}}.</h3></b>
+<b><h3>Poprawnych odpowiedzi: {{score}}.</h3></b></br></br>
+
+{{#questions}}
+	<h3>{{content}}</h3>
+	{{#pictureFileName}}
+		<img src="../../../../resources/images/{{pictureFileName}}" width="{{pictureWidth}}" height="{{pictureHeight}}"></br>
+	{{/pictureFileName}}
+	{{#wrongAnswer}}
+		<font color="red"><b>Zaznaczona odpowiedź: {{wrongAnswer}}</b></font></br>
+		<font color="green"><b>Poprawna odpowiedź: {{answer}}</b></font>
+	{{/wrongAnswer}}
+	{{^wrongAnswer}}
+		<font color="green"><b>Poprawna odpowiedź: {{answer}}</b></font>		
+	{{/wrongAnswer}}
+	
+	</br></br>
+{{/questions}}
+</div>
+</body>
+</html>

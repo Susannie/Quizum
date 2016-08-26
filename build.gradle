@@ -1,0 +1,33 @@
+apply plugin: 'eclipse'
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	
+	compileJava.options.encoding = 'UTF-8'
+
+	tasks.withType(JavaCompile) {
+    	options.encoding = 'UTF-8'
+	}
+
+	sourceCompatibility = 1.8
+	/*version = '0.0.1'*/
+ 
+    repositories {
+        mavenCentral()
+    }		
+    
+    task installResources(type: Copy) {
+		dependsOn build		
+		
+		from 'src/main/resources'
+		into '../dist/QuizumBeta/resources'
+	}
+}
+
+/*test {
+    filter {
+        includeTestsMatching "*Test"
+    }
+}*/
+
