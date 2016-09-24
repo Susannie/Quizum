@@ -1,6 +1,8 @@
 package quizum.app.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,6 +22,11 @@ import javax.swing.JPanel;
 import quizum.QuizumUtils;
 import quizum.beans.Question;
 import quizum.beans.UserInfo;
+import javax.swing.SwingConstants;
+import java.awt.Component;
+import javax.swing.JSeparator;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
 
 public class QuizFrame extends JFrame{
 	private List<Question> questionList;
@@ -39,28 +47,33 @@ public class QuizFrame extends JFrame{
 
 	private void initialize() {
 		setTitle("Quizum");
-		setBounds(100, 100, 1200, 500);
+		setLocation(100, 100);
+		setMinimumSize(new Dimension(1200, 700));
+		setMaximumSize(new Dimension(1400, 900));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		getContentPane().setLayout(new BorderLayout(0, 0));
+		getContentPane().setLayout(new BorderLayout(10, 10));
 		
 		iterator = -1;
 		
 		JPanel imagePanel = new JPanel();
-		imagePanel.setAutoscrolls(true);
-		
+		imagePanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		imageLabel = new JLabel();		
-		imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		imagePanel.add(imageLabel);
 
 		questionPanelList = new ArrayList<QuestionPanel>();		
 		questionList.forEach(question -> questionPanelList.add(new QuestionPanel(question)));
 		Collections.shuffle(questionPanelList);
 		
+		int width = questionPanelList.stream().max((qPanel1, qPanel2) -> Integer.compare(qPanel1.getSize().width, qPanel2.getSize().width)).get().getWidth();
+		int height = questionPanelList.stream().max((qPanel1, qPanel2) -> Integer.compare(qPanel1.getSize().height, qPanel2.getSize().height)).get().getHeight();
+		setSize(width, height);
+		
 		changePanel(getNextQuestionPanel());
 		
 		JPanel panel_1 = new JPanel();
-		getContentPane().add(panel_1, BorderLayout.SOUTH);
+		getContentPane().add(panel_1, BorderLayout.SOUTH);		
 
 		JButton btnNewButton = new JButton("Poprzednie");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -68,7 +81,7 @@ public class QuizFrame extends JFrame{
 				QuestionPanel panel = getPrevQuestionPanel();
 				
 				if(panel != null){
-					changePanel(panel);
+					changePanel(panel);					
 				}
 			}
 		});
@@ -89,6 +102,8 @@ public class QuizFrame extends JFrame{
 		panel_1.add(btnNewButton_1);
 
 		JButton btnNewButton_2 = new JButton("Następne");
+		btnNewButton_2.setAlignmentX(Component.CENTER_ALIGNMENT);
+		btnNewButton_2.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				QuestionPanel panel = getNextQuestionPanel();
@@ -109,15 +124,17 @@ public class QuizFrame extends JFrame{
 			return;
 		if (getContentPane().getComponents().length > 0)
 			getContentPane().remove(0);
-		getContentPane().add(panel, 0);
-		repaint();
-		revalidate();
+		getContentPane().add(panel, 0);		
 		
 		if(panel.question.getPictureFileName()!=null) {
 			setQuestionImage(QuizumUtils.getImageByFilename(panel.question.getPictureFileName()));
 		}else{
 			setQuestionImage(null);
 		}
+		
+		revalidate();
+		repaint();
+		pack();
 	}
 	
 	public QuestionPanel getNextQuestionPanel(){
