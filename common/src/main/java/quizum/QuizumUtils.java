@@ -24,6 +24,7 @@ import org.joda.time.DateTime;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -59,6 +60,7 @@ public class QuizumUtils {
 					return;
 				}
 			}
+			mapper.enable(SerializationFeature.INDENT_OUTPUT);
 			mapper.writeValue(file, questionList);
 			System.out.println("Saved");
 		} catch (IOException e) {
