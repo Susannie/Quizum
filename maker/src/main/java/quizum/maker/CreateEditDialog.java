@@ -170,10 +170,10 @@ public class CreateEditDialog extends JDialog {
 
 	private void prepareEditMode() {
 		textArea.setText(processedQuestion.getContent());
-		textField.setText(processedQuestion.getAnswers().get(0)[1]);
-		textField_1.setText(processedQuestion.getAnswers().get(1)[1]);
-		textField_2.setText(processedQuestion.getAnswers().get(2)[1]);
-		textField_3.setText(processedQuestion.getAnswers().get(3)[1]);
+		textField.setText(processedQuestion.getAnswerbyIndex(0));//getAnswers().get(0)[1]);
+		textField_1.setText(processedQuestion.getAnswerbyIndex(1));
+		textField_2.setText(processedQuestion.getAnswerbyIndex(2));
+		textField_3.setText(processedQuestion.getAnswerbyIndex(3));
 		
 		if (processedQuestion.getPictureFileName() != null) {
 			btnNewButton_1.setVisible(true);
