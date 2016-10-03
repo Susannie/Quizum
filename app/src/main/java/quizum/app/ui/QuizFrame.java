@@ -137,6 +137,10 @@ public class QuizFrame extends JFrame {
 	public void changePanel(QuestionPanel panel) {
 		if (panel == null)
 			return;
+		
+		int state = this.getExtendedState(); 
+		Dimension size = this.getSize();		
+		
 		if (getContentPane().getComponents().length > 0)
 			getContentPane().remove(0);
 		getContentPane().add(panel, 0);
@@ -164,6 +168,9 @@ public class QuizFrame extends JFrame {
 		revalidate();
 		repaint();
 		pack();
+		
+		// this line keeps frame from resizing by itself after changing active panel
+		if(state == JFrame.MAXIMIZED_BOTH) this.setExtendedState(state); else this.setSize(size);
 	}
 
 	public QuestionPanel getNextQuestionPanel() {		
