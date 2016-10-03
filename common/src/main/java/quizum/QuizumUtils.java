@@ -97,13 +97,13 @@ public class QuizumUtils {
             	else if(key != 0){
             		try{
             			String[] badAnswer = question.getAnswers().stream().filter(elem -> elem[0].equals(key.toString())).findFirst().orElse(null);
-            			quest.setWrongAnswer(badAnswer[1]);  
+            			quest.setWrongAnswer(badAnswer[1].replaceAll("\n", "<br>"));  
             		} catch (NoSuchElementException e){ 
             			quest.setWrongAnswer("Wystąpił błąd");  
             		}
             	}
             	
-            	quest.setContent(question.getContent());
+            	quest.setContent(question.getContent().replaceAll("\n", "<br>"));
             	quest.setPictureFileName(question.getPictureFileName());   
             	ImageIcon tempIcon = fitIcon(getImageByFilename(question.getPictureFileName()), 600, 600);
             	quest.setPictureWidth(tempIcon.getIconWidth());

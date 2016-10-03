@@ -28,16 +28,16 @@ body {
 <b><h3>Poprawnych odpowiedzi: {{score}}.</h3></b></br></br>
 
 {{#questions}}
-	<h3>{{content}}</h3>
+	<h3>{{{content}}}</h3>
 	{{#pictureFileName}}
 		<img src="../../../../resources/images/{{pictureFileName}}" width="{{pictureWidth}}" height="{{pictureHeight}}"></br>
 	{{/pictureFileName}}
 	{{#wrongAnswer}}
-		<font color="red"><b>Zaznaczona odpowiedź: {{wrongAnswer}}</b></font></br>
-		<font color="green"><b>Poprawna odpowiedź: {{answer}}</b></font>
+		<font color="red"><b>Zaznaczona odpowiedź: {{{wrongAnswer}}}</b></font></br>
+		<font color="green"><b>Poprawna odpowiedź: {{{answer}}}</b></font>
 	{{/wrongAnswer}}
 	{{^wrongAnswer}}
-		<font color="green"><b>Poprawna odpowiedź: {{answer}}</b></font>		
+		<font color="green"><b>Poprawna odpowiedź: {{{answer}}}</b></font>		
 	{{/wrongAnswer}}
 	
 	</br></br>
