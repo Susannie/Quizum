@@ -36,6 +36,7 @@ public class Question {
 	public void shuffleAnswers() {
 		Collections.shuffle(answers);
 	}
+
 	public String getAnswerbyIndex(int index){
 		String[] answer = answers.stream().filter(answ -> answ[0].equals(String.valueOf(index))).findAny().orElse(null);
 		return answer[1];

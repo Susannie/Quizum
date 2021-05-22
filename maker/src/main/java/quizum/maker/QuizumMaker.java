@@ -17,15 +17,20 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import quizum.Configs;
+import quizum.CsvQuestionService;
+import quizum.JsonQuestionService;
 import quizum.QuizumUtils;
 import quizum.beans.Question;
 
 public class QuizumMaker {
 	private JFrame frmQuizumMaker;
 	private DefaultListModel<Question> listmodel;
+	private final JsonQuestionService jsonQuestionService = new JsonQuestionService();
+	private final CsvQuestionService csvQuestionService = new CsvQuestionService();
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -125,7 +130,7 @@ public class QuizumMaker {
 				int returnVal = fc.showOpenDialog(frmQuizumMaker);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					QuizumUtils.loadQuestionList(fc.getSelectedFile())
+					jsonQuestionService.loadQuestionList(fc.getSelectedFile())
 							.forEach(question -> listmodel.addElement(question));
 				}
 			}
@@ -138,16 +143,17 @@ public class QuizumMaker {
 				String filename = "";
 				
 				fc.setCurrentDirectory(new File("."));
+				fc.setFileFilter(new FileNameExtensionFilter("CSV", "csv"));
 				int returnVal = fc.showSaveDialog(frmQuizumMaker);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					filename = fc.getSelectedFile().getPath();
+					filename = fc.getSelectedFile().getPath().replace("json","csv");
 				}
 				
-				if (filename == null || filename.isEmpty())
+				if (filename.isEmpty())
 					return;
 				
-				QuizumUtils.writeQuestionList(new File(filename.contains(".json") ? filename : filename+".json"), Collections.list(listmodel.elements()));
+				csvQuestionService.writeQuestionList(new File(filename.contains(".csv") ? filename : filename+".csv"), Collections.list(listmodel.elements()));
 			}
 		});
 		mnPlik.add(mntmZapisz);

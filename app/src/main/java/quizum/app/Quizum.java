@@ -16,15 +16,13 @@ import quizum.beans.UserInfo;
 public class Quizum {
 
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-					UIManager.getLookAndFeelDefaults().put("defaultFont", new Font(Configs.getInstance().getProperty("quizum.font.family","SansSerif"), Integer.parseInt(Configs.getInstance().getProperty("quizum.font.style","0")), Integer.parseInt(Configs.getInstance().getProperty("quizum.font.size","12"))));
-					new QuizFrame(Configs.getInstance().getProperty("question.base"), new UserInfo(userNameDialog()));					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		EventQueue.invokeLater(() -> {
+			try {
+				UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+				UIManager.getLookAndFeelDefaults().put("defaultFont", new Font(Configs.getInstance().getProperty("quizum.font.family","SansSerif"), Integer.parseInt(Configs.getInstance().getProperty("quizum.font.style","0")), Integer.parseInt(Configs.getInstance().getProperty("quizum.font.size","12"))));
+				new QuizFrame(Configs.getInstance().getProperty("question.base"), new UserInfo(userNameDialog()));
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}	

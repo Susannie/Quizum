@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -19,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import quizum.CsvQuestionService;
+import quizum.JsonQuestionService;
 import quizum.QuizumUtils;
 import quizum.beans.Question;
 import quizum.beans.UserInfo;
@@ -31,13 +34,19 @@ public class QuizFrame extends JFrame {
 	private List<QuestionPanel> questionPanelList;
 	private JButton buttonNext;
 	private JButton buttonPrev;
+	private final JsonQuestionService jsonQuestionService = new JsonQuestionService();
+	private final CsvQuestionService csvQuestionService = new CsvQuestionService();
 
 	public QuizFrame(String fileName, UserInfo userInfo) {
 		if (fileName == null || fileName.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "Nie można odczytać konfiguracji", "Błąd konfiguracji", JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
-		questionList = QuizumUtils.loadQuestionList(new File(fileName));
+		if (fileName.endsWith("json")) {
+			questionList = jsonQuestionService.loadQuestionList(new File(fileName));
+		} else {
+			questionList = csvQuestionService.loadQuestionList(new File(fileName));
+		}
 		this.userInfo = userInfo;
 		initialize();
 	}
@@ -59,12 +68,12 @@ public class QuizFrame extends JFrame {
 		imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		imagePanel.add(imageLabel);
 
-		questionPanelList = new ArrayList<QuestionPanel>();		
+		questionPanelList = new ArrayList<>();
 		questionList.forEach(question -> questionPanelList.add(new QuestionPanel(question)));
 		Collections.shuffle(questionPanelList);
 		
-		int width = questionPanelList.stream().max((qPanel1, qPanel2) -> Integer.compare(qPanel1.getSize().width, qPanel2.getSize().width)).get().getWidth();
-		int height = questionPanelList.stream().max((qPanel1, qPanel2) -> Integer.compare(qPanel1.getSize().height, qPanel2.getSize().height)).get().getHeight();
+		int width = questionPanelList.stream().max(Comparator.comparingInt(qPanel -> qPanel.getSize().width)).get().getWidth();
+		int height = questionPanelList.stream().max(Comparator.comparingInt(qPanel -> qPanel.getSize().height)).get().getHeight();
 		setSize(width, height);		
 		
 		JPanel panel_1 = new JPanel();
@@ -76,13 +85,11 @@ public class QuizFrame extends JFrame {
 		panel_1.add(panel_2);
 
 		buttonPrev = new JButton("Poprzednie");
-		buttonPrev.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				QuestionPanel panel = getPrevQuestionPanel();
-				
-				if(panel != null){
-					changePanel(panel);					
-				}
+		buttonPrev.addActionListener(arg0 -> {
+			QuestionPanel panel = getPrevQuestionPanel();
+
+			if(panel != null){
+				changePanel(panel);
 			}
 		});
 		panel_2.add(buttonPrev);
@@ -92,13 +99,11 @@ public class QuizFrame extends JFrame {
 		panel_2.add(label);
 
 		buttonNext = new JButton("Następne");
-		buttonNext.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				QuestionPanel panel = getNextQuestionPanel();
+		buttonNext.addActionListener(arg0 -> {
+			QuestionPanel panel = getNextQuestionPanel();
 
-				if (panel != null) {
-					changePanel(panel);
-				}
+			if (panel != null) {
+				changePanel(panel);
 			}
 		});
 		panel_2.add(buttonNext);			

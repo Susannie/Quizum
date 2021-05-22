@@ -1,8 +1,10 @@
 apply plugin: 'eclipse'
+apply plugin: 'idea'
 
 subprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
+	apply plugin: 'idea'
 	
 	compileJava.options.encoding = 'UTF-8'
 

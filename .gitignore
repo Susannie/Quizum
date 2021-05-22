@@ -10,3 +10,10 @@
 */build/*
 */bin/*
 dist/
+*.iml
+.idea/
+gradle/
+gradlew
+gradlew.bat
+*.ipr
+*.iws

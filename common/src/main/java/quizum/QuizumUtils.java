@@ -1,72 +1,23 @@
 package quizum;
 
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
-import org.joda.time.DateTime;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-
+import org.apache.commons.text.StringEscapeUtils;
+import org.joda.time.DateTime;
 import quizum.beans.Question;
 import quizum.beans.UserInfo;
 import quizum.dto.QuestionDTO;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.*;
+
 public class QuizumUtils {
-
-	public static List<Question> loadQuestionList(File file) {
-		ObjectMapper mapper = new ObjectMapper();
-		List<Question> list = new ArrayList<Question>();
-
-		try {
-			list = mapper.readValue(file, new TypeReference<List<Question>>() {
-			});
-		} catch (IOException e) {
-			System.out.println("Failed to load file\n" + e.getLocalizedMessage());
-		}
-
-		return list;
-	}
-	
-	public static void writeQuestionList(File file, List<Question> questionList){
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			if (!file.exists()) {
-				file.createNewFile();
-			}else{
-				int option=new JOptionPane().showConfirmDialog(null, "Jesteś pewien że chcesz nadpisać zawartość pliku: "+file.getName()+"?", "Nadpisać?", JOptionPane.YES_NO_OPTION);
-				if(option == JOptionPane.NO_OPTION){
-					return;
-				}
-			}
-			mapper.enable(SerializationFeature.INDENT_OUTPUT);
-			mapper.writeValue(file, questionList);
-			System.out.println("Saved");
-		} catch (IOException e) {
-			System.out.println("Failed to save question to file \n" + e.getLocalizedMessage());
-		}
-	}
 	
 	public static void generateReport(UserInfo userInfo){		
 		String datePath;
@@ -89,7 +40,7 @@ public class QuizumUtils {
             	QuestionDTO quest = new QuestionDTO();
             	String[] rightAnswer = question.getAnswers().stream().filter(elem -> elem[0].equals("0")).findAny().get();
             	
-            	quest.setAnswer(rightAnswer[1]);          	
+            	quest.setAnswer(escape(rightAnswer[1]));
             	
             	if(key == null){
             		quest.setWrongAnswer("Brak");
@@ -97,13 +48,13 @@ public class QuizumUtils {
             	else if(key != 0){
             		try{
             			String[] badAnswer = question.getAnswers().stream().filter(elem -> elem[0].equals(key.toString())).findFirst().orElse(null);
-            			quest.setWrongAnswer(badAnswer[1].replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\n", "<br>"));  
+            			quest.setWrongAnswer(escape(badAnswer[1]));
             		} catch (NoSuchElementException e){ 
-            			quest.setWrongAnswer("Wystąpił błąd");  
+            			quest.setWrongAnswer("Wystąpił błąd");
             		}
             	}
             	
-            	quest.setContent(question.getContent().replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll("\n", "<br>"));
+            	quest.setContent(escape(question.getContent()));
             	quest.setPictureFileName(question.getPictureFileName());   
             	ImageIcon tempIcon = fitIcon(getImageByFilename(question.getPictureFileName()), 600, 600);
             	quest.setPictureWidth(tempIcon.getIconWidth());
@@ -117,17 +68,15 @@ public class QuizumUtils {
         	File file = new File("results/"+datePath);
         	if(!file.exists()) file.mkdirs();
         	
-            Writer writer =	new OutputStreamWriter(new FileOutputStream("results/"+datePath+userInfo.getUsername()+".html"), "UTF-8");
-			Mustache mustache = mf.compile(new InputStreamReader(new FileInputStream("resources/templates/"+Configs.getInstance().getProperty("result.template")), "UTF-8"),"wynik");
+            Writer writer =	new OutputStreamWriter(new FileOutputStream("results/"+datePath+userInfo.getUsername()+".html"), StandardCharsets.UTF_8);
+			Mustache mustache = mf.compile(new InputStreamReader(new FileInputStream("resources/templates/"+Configs.getInstance().getProperty("result.template")), StandardCharsets.UTF_8),"wynik");
 			mustache.execute(writer, scopes);
 			writer.flush();
-			writer.close();			
-			
+			writer.close();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public static ImageIcon getImageByFilename(String filename){
@@ -159,6 +108,10 @@ public class QuizumUtils {
 	    g2.dispose();
 
 	    return resizedImg;
+	}
+
+	private static String escape(String stringToEscape) {
+		return StringEscapeUtils.escapeHtml3(stringToEscape);
 	}
 	
 }
