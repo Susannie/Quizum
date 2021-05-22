@@ -65,7 +65,7 @@ public class QuizumMaker {
         list.setBounds(10, 36, 518, 334);
         frmQuizumMaker.getContentPane().add(list);
 
-        JLabel lblListaPyta = new JLabel("Lista pyta\u0144");
+        JLabel lblListaPyta = new JLabel("Lista pytań");
         lblListaPyta.setBounds(10, 11, 114, 14);
         frmQuizumMaker.getContentPane().add(lblListaPyta);
 
