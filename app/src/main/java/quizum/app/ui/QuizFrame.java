@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 
 import quizum.CsvQuestionService;
 import quizum.JsonQuestionService;
+import quizum.QuizumRuntimeException;
 import quizum.QuizumUtils;
 import quizum.beans.Question;
 import quizum.beans.UserInfo;
@@ -42,10 +43,15 @@ public class QuizFrame extends JFrame {
 			JOptionPane.showMessageDialog(null, "Nie można odczytać konfiguracji", "Błąd konfiguracji", JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
-		if (fileName.endsWith("json")) {
-			questionList = jsonQuestionService.loadQuestionList(new File(fileName));
-		} else {
-			questionList = csvQuestionService.loadQuestionList(new File(fileName));
+		try {
+			if (fileName.endsWith("json")) {
+				questionList = jsonQuestionService.loadQuestionList(new File(fileName));
+			} else {
+				questionList = csvQuestionService.loadQuestionList(new File(fileName));
+			}
+		} catch (QuizumRuntimeException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Błąd wczytywania pliku", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
 		}
 		this.userInfo = userInfo;
 		initialize();

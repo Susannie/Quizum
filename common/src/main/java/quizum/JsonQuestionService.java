@@ -13,22 +13,23 @@ import java.util.List;
 
 public class JsonQuestionService implements QuestionService {
     @Override
-    public List<Question> loadQuestionList(File file) {
+    public List<Question> loadQuestionList(File file) throws QuizumRuntimeException {
         ObjectMapper mapper = new ObjectMapper();
-        List<Question> list = new ArrayList<>();
+        List<Question> list;
 
         try {
             list = mapper.readValue(file, new TypeReference<List<Question>>() {
             });
         } catch (IOException e) {
             System.out.println("Failed to load file\n" + e.getLocalizedMessage());
+            throw new QuizumRuntimeException("Nie udało się odczytać danych z pliku.");
         }
 
         return list;
     }
 
     @Override
-    public void writeQuestionList(File file, List<Question> questionList) {
+    public void writeQuestionList(File file, List<Question> questionList) throws QuizumRuntimeException {
         ObjectMapper mapper = new ObjectMapper();
         try {
             if (!file.exists()) {
@@ -44,6 +45,7 @@ public class JsonQuestionService implements QuestionService {
             System.out.println("Saved");
         } catch (IOException e) {
             System.out.println("Failed to save question to file \n" + e.getLocalizedMessage());
+            throw new QuizumRuntimeException("Nie udało się zapisać do pliku.");
         }
     }
 }

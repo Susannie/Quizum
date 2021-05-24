@@ -44,7 +44,7 @@ public class QuizumUtils {
             	
             	if(key == null){
             		quest.setWrongAnswer("Brak");
-            	}          	
+            	}
             	else if(key != 0){
             		try{
             			String[] badAnswer = question.getAnswers().stream().filter(elem -> elem[0].equals(key.toString())).findFirst().orElse(null);
@@ -75,7 +75,8 @@ public class QuizumUtils {
 			writer.close();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Nie udało się wygenerować raportu", "Błąd zapisu do pliku", JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
 		}
 	}
 	

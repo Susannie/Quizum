@@ -1,6 +1,7 @@
 package quizum;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -33,5 +34,19 @@ public class Configs extends Properties{
 		}
 		
 		return instance;
+	}
+
+	public void changeDefaultFile(String filename) throws IOException {
+		instance.setProperty("question.base", filename);
+		FileOutputStream out = new FileOutputStream("properties.properties");
+		instance.store(out, null);
+		out.close();
+	}
+
+	public void changeDefaultTemplate(String filename) throws IOException {
+		instance.setProperty("result.template", filename);
+		FileOutputStream out = new FileOutputStream("properties.properties");
+		instance.store(out, null);
+		out.close();
 	}
 }

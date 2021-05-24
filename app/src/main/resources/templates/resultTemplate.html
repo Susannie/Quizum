@@ -25,8 +25,9 @@ body {
 <div id="result">
 <center><h2>Wyniki testu użytkownika: {{username}}</h2></center></br>
 
-<b><h3>Ilość pytań: {{total}}.</h3></b>
-<b><h3>Poprawnych odpowiedzi: {{score}}.</h3></b></br></br>
+<h3>Ilość pytań: {{total}}.</h3>
+<h3>Poprawnych odpowiedzi: {{score}}.</h3>
+<hr><hr>
 
 {{#questions}}
 	<h3>{{{content}}}</h3>
@@ -42,6 +43,7 @@ body {
 	{{/wrongAnswer}}
 	
 	</br></br>
+	<hr>
 {{/questions}}
 </div>
 </body>
