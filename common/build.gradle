@@ -5,6 +5,8 @@ dependencies {
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.7.5'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.7.5'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.7.5'
+    compile group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.12.4'
+
     compile group: 'joda-time', name: 'joda-time', version: '2.9.4'
     compile group: 'com.github.spullara.mustache.java', name: 'compiler', version: '0.9.2'
 
@@ -12,10 +14,12 @@ dependencies {
 }
 
 task install(type: Copy) {
-	dependsOn installResources	
-	
-	from 'src/main/config'
-	into '../dist/QuizumBeta'
-	
-	mkdir '../dist/QuizumBeta/resources/images'	
+    dependsOn installResources
+
+    from 'src/main/config'
+    into '../dist/QuizumBeta'
+
+    mkdir '../dist/QuizumBeta/resources/images'
+    mkdir '../dist/QuizumBeta/resources/quizes'
+    mkdir '../dist/QuizumBeta/results'
 }

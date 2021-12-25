@@ -8,7 +8,6 @@ import quizum.beans.Question;
 import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class JsonQuestionService implements QuestionService {

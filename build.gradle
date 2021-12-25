@@ -2,29 +2,29 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 
 subprojects {
-	apply plugin: 'java'
-	apply plugin: 'eclipse'
-	apply plugin: 'idea'
-	
-	compileJava.options.encoding = 'UTF-8'
+    apply plugin: 'java'
+//    apply plugin: 'eclipse'
+//    apply plugin: 'idea'
 
-	tasks.withType(JavaCompile) {
-    	options.encoding = 'UTF-8'
-	}
+    compileJava.options.encoding = 'UTF-8'
 
-	sourceCompatibility = 1.8
-	/*version = '0.0.1'*/
- 
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    sourceCompatibility = 1.8
+    /*version = '0.0.1'*/
+
     repositories {
         mavenCentral()
-    }		
-    
+    }
+
     task installResources(type: Copy) {
-		dependsOn build		
-		
-		from 'src/main/resources'
-		into '../dist/QuizumBeta/resources'
-	}
+        dependsOn build
+
+        from 'src/main/resources'
+        into '../dist/QuizumBeta/resources'
+    }
 }
 
 /*test {

@@ -1,16 +1,14 @@
 package quizum.app.ui;
 
-import java.awt.Color;
-
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
+import javax.swing.*;
+import java.awt.*;
 
 public class WrappedLabel extends JTextArea {
-	
-	WrappedLabel(String string) {
+
+    WrappedLabel(String string) {
         super(string);
-        setEditable(false);  
-        setCursor(null);  
+        setEditable(false);
+        setCursor(null);
         setOpaque(false);
         setBackground(new Color(0, 0, 0, 0));
         setFont(UIManager.getFont("Label.font"));
@@ -19,6 +17,6 @@ public class WrappedLabel extends JTextArea {
         setLineWrap(true);
         setWrapStyleWord(true);
     }
-     
-    
+
+
 }

@@ -7,11 +7,14 @@ import quizum.beans.Question;
 
 import javax.swing.*;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 public class CsvQuestionService implements QuestionService {
-    private static final String[] HEADERS = new String[]{"Pytanie","Nazwa pliku z obrazkiem","Prawidłowa odpowiedź","Pozostałe odpowiedzi"};
+    private static final String[] HEADERS = new String[]{"Pytanie", "Nazwa pliku z obrazkiem", "Prawidłowa odpowiedź", "Pozostałe odpowiedzi"};
 
     @Override
     public List<Question> loadQuestionList(File file) throws QuizumRuntimeException {

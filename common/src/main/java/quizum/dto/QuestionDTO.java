@@ -1,61 +1,72 @@
 package quizum.dto;
 
-public class QuestionDTO{
-	private String content;
-	private String pictureFileName;
-	private int pictureWidth;
-	private int pictureHeight;
-	private String answer;
-	private String wrongAnswer;
+import java.util.List;
 
-	public QuestionDTO(){
-	}
-	
-	public String getContent() {
-		return content;
-	}
+public class QuestionDTO {
+    private String content;
+    private String pictureFileName;
+    private int pictureWidth;
+    private int pictureHeight;
+    private String answer;
+    private String wrongAnswer;
+    private List<String> otherAnswers;
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public QuestionDTO() {
+    }
 
-	public String getPictureFileName() {
-		return pictureFileName;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public void setPictureFileName(String pictureFileName) {
-		this.pictureFileName = pictureFileName;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public int getPictureWidth() {
-		return pictureWidth;
-	}
+    public String getPictureFileName() {
+        return pictureFileName;
+    }
 
-	public void setPictureWidth(int pictureWidth) {
-		this.pictureWidth = pictureWidth;
-	}
+    public void setPictureFileName(String pictureFileName) {
+        this.pictureFileName = pictureFileName;
+    }
 
-	public int getPictureHeight() {
-		return pictureHeight;
-	}
+    public int getPictureWidth() {
+        return pictureWidth;
+    }
 
-	public void setPictureHeight(int pictureHeight) {
-		this.pictureHeight = pictureHeight;
-	}
+    public void setPictureWidth(int pictureWidth) {
+        this.pictureWidth = pictureWidth;
+    }
 
-	public String getAnswer() {
-		return answer;
-	}
+    public int getPictureHeight() {
+        return pictureHeight;
+    }
 
-	public void setAnswer(String answer) {
-		this.answer = answer;
-	}
+    public void setPictureHeight(int pictureHeight) {
+        this.pictureHeight = pictureHeight;
+    }
 
-	public String getWrongAnswer() {
-		return wrongAnswer;
-	}
+    public String getAnswer() {
+        return answer;
+    }
 
-	public void setWrongAnswer(String wrongAnswer) {
-		this.wrongAnswer = wrongAnswer;
-	}	
+    public void setAnswer(String answer) {
+        this.answer = answer;
+    }
+
+    public String getWrongAnswer() {
+        return wrongAnswer;
+    }
+
+    public void setWrongAnswer(String wrongAnswer) {
+        this.wrongAnswer = wrongAnswer;
+    }
+
+    public List<String> getOtherAnswers() {
+        return otherAnswers;
+    }
+
+    public void setOtherAnswers(List<String> otherAnswers) {
+        this.otherAnswers = otherAnswers;
+    }
 }

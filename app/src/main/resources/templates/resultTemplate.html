@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Wyniki testu</title>
-<style>
+    <meta charset="UTF-8">
+    <title>Wyniki testu</title>
+    <style>
 body {
 	background: /* On "top" */ repeating-linear-gradient( 45deg, transparent
 		, transparent 10px, #ddd 10px, #ddd 20px), /* on "bottom" */
@@ -19,32 +19,45 @@ body {
 	width: 75%;
 	white-space: pre-line;
 }
-</style>
+
+    </style>
 </head>
 <body>
 <div id="result">
-<center><h2>Wyniki testu użytkownika: {{username}}</h2></center></br>
+    {{#userInfo}}
+    <center>Zestaw pytań: {{filenameWithoutExtension}}</center>
+    <center>Data wykonania raportu: {{finishTime}}</center>
+    {{/userInfo}}
+    <center><h2>Wyniki testu użytkownika: {{username}}</h2></center>
+    </br>
 
-<h3>Ilość pytań: {{total}}.</h3>
-<h3>Poprawnych odpowiedzi: {{score}}.</h3>
-<hr><hr>
+    <h3>Ilość pytań: {{total}}.</h3>
+    <h3>Poprawnych odpowiedzi: {{score}}.</h3>
+    <hr>
+    <hr>
 
-{{#questions}}
-	<h3>{{{content}}}</h3>
-	{{#pictureFileName}}
-		<img src="../../../../resources/images/{{pictureFileName}}" width="{{pictureWidth}}" height="{{pictureHeight}}"></br>
-	{{/pictureFileName}}
-	{{#wrongAnswer}}
-		<font color="red"><b>Zaznaczona odpowiedź: {{{wrongAnswer}}}</b></font></br>
-		<font color="green"><b>Poprawna odpowiedź: {{{answer}}}</b></font>
-	{{/wrongAnswer}}
-	{{^wrongAnswer}}
-		<font color="green"><b>Poprawna odpowiedź: {{{answer}}}</b></font>		
-	{{/wrongAnswer}}
-	
-	</br></br>
-	<hr>
-{{/questions}}
+    {{#questions}}
+    <div>
+        <h3>{{{content}}}</h3>
+        {{#pictureFileName}}
+        <img src="../../../../resources/images/{{pictureFileName}}" width="{{pictureWidth}}"
+             height="{{pictureHeight}}"></br>
+        {{/pictureFileName}}
+        {{#wrongAnswer}}
+        <font color="red"><b>Zaznaczona odpowiedź: {{{wrongAnswer}}}</b></font></br>
+        <font color="green"><b>Poprawna odpowiedź: {{{answer}}}</b></font></br>
+        <b>Pozostałe odpowiedzi:</b>
+        {{#otherAnswers}}
+        <font color="#8d4e4e"><b>{{.}}</b></font>
+        {{/otherAnswers}}
+        {{/wrongAnswer}}
+        {{^wrongAnswer}}
+        <font color="green"><b>Poprawna odpowiedź: {{{answer}}}</b></font>
+        {{/wrongAnswer}}
+        </br></br>
+        <hr>
+    </div>
+    {{/questions}}
 </div>
 </body>
 </html>

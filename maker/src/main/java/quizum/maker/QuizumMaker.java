@@ -1,19 +1,17 @@
 package quizum.maker;
 
-import java.awt.EventQueue;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import quizum.Configs;
+import quizum.CsvQuestionService;
+import quizum.JsonQuestionService;
+import quizum.QuizumRuntimeException;
+import quizum.beans.Question;
+
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
-
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import quizum.*;
-import quizum.beans.Question;
 
 public class QuizumMaker {
     private JFrame frmQuizumMaker;
@@ -40,7 +38,8 @@ public class QuizumMaker {
 
     private void initialize() {
         frmQuizumMaker = new JFrame();
-        frmQuizumMaker.setTitle("Quizum Maker");
+        String title = "Quizum Maker";
+        setTitle(title);
         frmQuizumMaker.setBounds(100, 100, 805, 440);
         frmQuizumMaker.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frmQuizumMaker.getContentPane().setLayout(null);
@@ -94,14 +93,17 @@ public class QuizumMaker {
         menuBar.add(mnPlik);
 
         JMenuItem mntmNowyZestaw = new JMenuItem("Nowy");
-        mntmNowyZestaw.addActionListener(listener -> listmodel.clear());
+        mntmNowyZestaw.addActionListener(listener -> {
+            listmodel.clear();
+            setTitle(title);
+        });
         mnPlik.add(mntmNowyZestaw);
 
         JMenuItem mntmWczytajZestaw = new JMenuItem("Wczytaj");
         mntmWczytajZestaw.addActionListener(listener -> {
             listmodel.clear();
 
-            fc.setCurrentDirectory(new File("."));
+            fc.setCurrentDirectory(new File("./resources/quizes"));
             fc.resetChoosableFileFilters();
             fc.setFileFilter(filter);
             int returnVal = fc.showOpenDialog(frmQuizumMaker);
@@ -117,6 +119,7 @@ public class QuizumMaker {
                         csvQuestionService.loadQuestionList(selectedFile)
                                 .forEach(question -> listmodel.addElement(question));
                     }
+                    setTitle(title, selectedFile.getName());
                 } catch (QuizumRuntimeException e) {
                     JOptionPane.showMessageDialog(null, e.getMessage(), "Błąd wczytywania pliku", JOptionPane.ERROR_MESSAGE);
                 }
@@ -128,7 +131,7 @@ public class QuizumMaker {
         mntmZapiszJSON.addActionListener(listener -> {
             String filename = "";
 
-            fc.setCurrentDirectory(new File("."));
+            fc.setCurrentDirectory(new File("./resources/quizes"));
             fc.resetChoosableFileFilters();
             fc.setFileFilter(new FileNameExtensionFilter("JSON", "json"));
             fc.setSelectedFile(new File("pytania.json"));
@@ -138,13 +141,16 @@ public class QuizumMaker {
                 filename = fc.getSelectedFile().getPath();
             }
 
-            if (filename.isEmpty())
+            if (filename.isEmpty()) {
+                setTitle(title);
                 return;
+            }
 
             try {
                 jsonQuestionService.writeQuestionList(new File(filename.endsWith(".json") ? filename : filename + ".json"), Collections.list(listmodel.elements()));
+                setTitle(title, fc.getSelectedFile().getName());
             } catch (QuizumRuntimeException e) {
-                    JOptionPane.showMessageDialog(null, e.getMessage(), "Błąd zapisu do pliku", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, e.getMessage(), "Błąd zapisu do pliku", JOptionPane.ERROR_MESSAGE);
             }
         });
         mnPlik.add(mntmZapiszJSON);
@@ -153,7 +159,7 @@ public class QuizumMaker {
         mntmZapiszCSV.addActionListener(listener -> {
             String filename = "";
 
-            fc.setCurrentDirectory(new File("."));
+            fc.setCurrentDirectory(new File("./resources/quizes"));
             fc.resetChoosableFileFilters();
             fc.setFileFilter(new FileNameExtensionFilter("CSV", "csv"));
             fc.setSelectedFile(new File("pytania.csv"));
@@ -163,11 +169,14 @@ public class QuizumMaker {
                 filename = fc.getSelectedFile().getPath();
             }
 
-            if (filename.isEmpty())
+            if (filename.isEmpty()){
+                setTitle(title);
                 return;
+            }
 
             try {
                 csvQuestionService.writeQuestionList(new File(filename.endsWith(".csv") ? filename : filename + ".csv"), Collections.list(listmodel.elements()));
+                setTitle(title, fc.getSelectedFile().getName());
             } catch (QuizumRuntimeException e) {
                 JOptionPane.showMessageDialog(null, e.getMessage(), "Błąd zapisu do pliku", JOptionPane.ERROR_MESSAGE);
             }
@@ -176,7 +185,7 @@ public class QuizumMaker {
 
         JMenuItem mntmWybierzPytania = new JMenuItem("Zmień aktywny zestaw pytań");
         mntmWybierzPytania.addActionListener(listener -> {
-            fc.setCurrentDirectory(new File("."));
+            fc.setCurrentDirectory(new File("./resources/quizes"));
             fc.resetChoosableFileFilters();
             fc.setFileFilter(filter);
             fc.setSelectedFile(new File(Configs.getInstance().getProperty("question.base")));
@@ -184,7 +193,7 @@ public class QuizumMaker {
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fc.getSelectedFile();
-                if(!fc.getFileFilter().accept(selectedFile)) {
+                if (!fc.getFileFilter().accept(selectedFile)) {
                     JOptionPane.showMessageDialog(null, "Wybrano niepoprawny format pliku", "Błąd podczas zmiany konfiguracji", JOptionPane.ERROR_MESSAGE);
                 }
                 try {
@@ -207,7 +216,7 @@ public class QuizumMaker {
 
             if (returnVal == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fc.getSelectedFile();
-                if(!fc.getFileFilter().accept(selectedFile)) {
+                if (!fc.getFileFilter().accept(selectedFile)) {
                     JOptionPane.showMessageDialog(null, "Wybrano niepoprawny format pliku", "Błąd podczas zmiany konfiguracji", JOptionPane.ERROR_MESSAGE);
                 }
                 try {
@@ -219,5 +228,13 @@ public class QuizumMaker {
             }
         });
         mnPlik.add(mntmWybierzSzablon);
+    }
+
+    private void setTitle(String title) {
+        frmQuizumMaker.setTitle(title);
+    }
+
+    private void setTitle(String title, String filename) {
+        frmQuizumMaker.setTitle(title+" - "+filename);
     }
 }

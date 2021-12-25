@@ -3,22 +3,22 @@ apply plugin: 'application'
 mainClassName = 'quizum.maker.QuizumMaker'
 
 jar {
-	baseName = 'QuizumMaker'
-	
-	manifest {
+    baseName = 'QuizumMaker'
+
+    manifest {
         attributes 'Main-Class': mainClassName
     }
-    
-	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
 }
 
 dependencies {
     compile project(':common')
 }
- 
+
 task install(type: Copy) {
-	dependsOn installResources
-	
-	from jar
-	into '../dist/QuizumBeta'
+    dependsOn installResources
+
+    from jar
+    into '../dist/QuizumBeta'
 }
